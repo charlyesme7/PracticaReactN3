@@ -15,20 +15,20 @@ export default function Wishlist() {
       <ScrollView>
         {wishList.length === 0 ? (
           <View>
+            <Text style={styles.paragraph}>Tu wishlist esta vacia</Text>
             <Image
               style={styles.logo}
-              source={require('../Imagenes/EmptyWishlist.png')}
+              source={require('../Imagenes/wishlist.png')}
             />
-            <Text style={styles.paragraph}>No hay nada en tu Wishlist</Text>
           </View>
         ) : (
             wishList.map((a,i)=>
             <Card>
             <Card.Title>{a.titulo}</Card.Title>
-            <Text key={i}>Precio = ${a.precio} </Text>
+            <Text key={i}>Precio= ${a.precio} </Text>
             <Text key={i + 10}>Idioma = {a.idioma}</Text>
             <View style={styles.container}>
-              <TouchableHighlight onPress={()=>agregarCarro(a)}>
+              <TouchableHighlight onPress={()=> agregarCarro(a)}>
                 <Ionicons name={'cart-outline'} size={22} color={'green'} />
               </TouchableHighlight>
               <TouchableHighlight onPress={() => eliminarWishList(a)}>
@@ -61,5 +61,6 @@ const styles = StyleSheet.create({
   logo: {
     height: 200,
     width: 300,
+    alignItems: 'center',
   },
 });

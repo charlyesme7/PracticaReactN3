@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Text, View, StyleSheet, Image, TouchableHighlight, Alert } from 'react-native';
-import { Card, ListItem, Button, Icon } from 'react-native-elements';
+import { Card} from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -15,10 +15,10 @@ export default function HomeScreen() {
         {catalogo.map((a, i) => (
           <Card>
             <Card.Title>{a.titulo}</Card.Title>
-            <Text key={i}>Precio = ${a.precio} </Text>
-            <Text key={i + 10}>Idioma = {a.idioma}</Text>
+            <Text key={i}>Precio= ${a.precio} </Text>
+            <Text key={i + 10}>Idioma= {a.idioma}</Text>
             <View style={styles.container}>
-              <TouchableHighlight onPress={()=>agregarCarro(a)}>
+              <TouchableHighlight onPress={()=> agregarCarro(a)}>
                 <Ionicons name={'cart-outline'} size={22} color={'green'} />
               </TouchableHighlight>
               {a.desactivado === false ? (

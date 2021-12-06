@@ -13,8 +13,8 @@ import { LibreriaContext } from '../Context/LibreriaContext';
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTabNavigator1(){
-  const { cantidades, contando } = useContext(LibreriaContext);
+export default function BottomTabNavigator(){
+  const { cantidades, contando, eliminarCarro } = useContext(LibreriaContext);
   return(
     <Tab.Navigator
       initialRouteName="Libreria"
@@ -64,6 +64,7 @@ export default function BottomTabNavigator1(){
     <Tab.Screen
       name = "Carrito"
       component={Carrito}
+      
       options={{
           tabBarLabel:"Carrito",
           tabBarIcon:({color})=>(

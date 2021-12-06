@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { Card, ListItem, Button, Icon } from 'react-native-elements';
-
+import { Card} from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
-
 import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -20,31 +18,29 @@ export default function Wishlist() {
           <View>
             <Image
               style={styles.logo}
-              source={require('../Imagenes/Emptycarrito.png')}
+              source={require('../Imagenes/carro.png')}
             />
-            <Text style={styles.paragraph}>No hay nada en tu carrito</Text>
+            <Text style={styles.paragraph}>Tu carrito esta vacio</Text>
           </View>
         :
           <ScrollView>
           <View>
             <Text style={styles.paragraph}>Total: $ {total}</Text>
             <View style={styles.container2}>
-            <FontAwesome.Button name="paypal" backgroundColor="#3b7bbf" onPress={()=>comprarCarrito()}>
-              Pagar con Paypal
+            <FontAwesome.Button name="check-circle" backgroundColor="#3b7bbf" onPress={()=>comprarCarrito()}>
+              Pagar
             </FontAwesome.Button>
-            <Text style={styles.paragraph}>____________________</Text>
-            <FontAwesome.Button name="remove" backgroundColor="#c33d3c" onPress={()=>eliminarCarrito()}>
-              Eliminar contenido del carrito
-            </FontAwesome.Button>
+            
+            
           </View>
         </View>
           {
             carrito.map((a,i)=>
             <Card>
             <Card.Title>{a.titulo}</Card.Title>
-            <Text key={i}>Cantidad = {a.cantidad} </Text>
-            <Text key={i}>Precio = $ {a.precio} c/u </Text>
-            <Text key={i}>Importe = $ {a.importe}  </Text>
+            <Text key={i}>Cantidad= {a.cantidad} </Text>
+            <Text key={i}>Precio= $ {a.precio} c/u </Text>
+            <Text key={i}>Importe= $ {a.importe}  </Text>
             <View style={styles.container}>
               <TouchableHighlight onPress={() => eliminarCarro(a)}>
                 <Ionicons name={'remove-circle'} size={22} color={'red'} />
