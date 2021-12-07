@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, Image, TouchableHighlight, Alert } from 'react-
 import { Card} from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import { LibreriaContext } from '../Context/LibreriaContext';
 
 export default function HomeScreen() {
@@ -15,21 +14,32 @@ export default function HomeScreen() {
         {catalogo.map((a, i) => (
           <Card>
             <Card.Title>{a.titulo}</Card.Title>
-            <Text key={i}>Precio= ${a.precio} </Text>
-            <Text key={i + 10}>Idioma= {a.idioma}</Text>
-            <View style={styles.container}>
-              <TouchableHighlight onPress={()=> agregarCarro(a)}>
-                <Ionicons name={'cart-outline'} size={22} color={'green'} />
-              </TouchableHighlight>
+            <View
+            style={{
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+              marginLeft: 1,
+              marginRight: 1
+            }}
+          />
+            <View style={styles.datos}>
+              <Text style={styles.datos} key={i}>Precio: ${a.precio} </Text>
+              <Text style={styles.datos} key={i + 10}>{a.idioma}</Text>
+            </View>
+            
+            <View style={styles.botones}>
               {a.desactivado === false ? (
                 <TouchableHighlight onPress={() => agregarWishList(a)}>
-                  <Ionicons name={'heart-outline'} size={22} color={'red'} />
+                  <Ionicons name={'heart'} size={35} color={'gray'} />
                 </TouchableHighlight>
               ) : (
                 <TouchableHighlight onPress={() => eliminarWishList(a)}>
-                  <Ionicons name={'heart-dislike-outline'} size={22} color={'red'} />
+                  <Ionicons name={'heart'} size={35} color={'red'} />
                 </TouchableHighlight>
               )}
+              <TouchableHighlight onPress={()=> agregarCarro(a)}>
+                <Ionicons name={'cart-outline'} size={35} color={'green'} />
+              </TouchableHighlight>
             </View>
           </Card>
         ))}
@@ -39,11 +49,16 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 24,
-    flexDirection: 'row',
+  botones: {
+    padding: 20,
+    size:40,
+    flexDirection: 'row-reverse'
   },
+  datos: {
+    flex: 1,
+    fontWeight: 'bold',
+    justifyContent: 'flex-end',
+    flexDirection: 'column'
+  }
 });
+

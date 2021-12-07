@@ -19,94 +19,90 @@ const Libreriaprovider = (props) =>{
     {codigo:5,titulo:"Ingenieria De Software 2", precio:200.00, idioma:'ESP',desactivado:false}
   ]); 
   
-  const agregarWishList = (_lib) =>{
-    let tempcatalogo = catalogo;
+  const agregarWishList = (libro) =>{
+    let temp = catalogo;
+    let index = temp.findIndex((element) => element.codigo === libro.codigo);
 
-    tempcatalogo = catalogo.filter(a=>a.codigo!==_lib.codigo) 
+    temp[index].desactivado=true;
 
-    let cambiandopropiedad ={ 
-        codigo:_lib.codigo,
-        titulo:_lib.titulo,
-        precio:_lib.precio,
-        idioma:_lib.idioma, 
-        desactivado:true
+    let temp2 =[...wishList,libro];
+    temp2 =temp2.sort((a,b)=>a.codigo>b.codigo)
+
+    setWishList(temp2);
+    setCatalogo(temp);
+
+    if(Platform.OS==='android'){
+      ToastAndroid.showWithGravityAndOffset(
+        "Curso agragado a la wishlist",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        150
+      );
     }
-    
-    let todoenorden = tempcatalogo.concat(cambiandopropiedad)
-
-    setCatalogo(todoenorden)
-
-    setWishList(
-        wishlist => [...wishlist,cambiandopropiedad] 
-    )
   }
 
-  const eliminarWishList=(_lib)=>{
-    let eliminado = wishList.filter(a=>a.codigo!==_lib.codigo)
+  const eliminarWishList=(libro)=>{
+    let temp = catalogo;
+    let index = temp.findIndex((element)=>element.codigo===libro.codigo);
     
-    let tempcatalogo = catalogo.filter(a=>a.codigo!==_lib.codigo);
+    temp[index].desactivado=false;
 
-    let cambiandopropiedad ={
-      codigo:_lib.codigo,
-      titulo:_lib.titulo,
-      precio:_lib.precio,
-      idioma:_lib.idioma,
-      desactivado:false
+    let tempw = wishList.filter(c=>c.codigo!==libro.codigo)
+    setWishList(tempw);
+    setCatalogo(temp);
+
+    if(Platform.OS==='android'){
+      ToastAndroid.showWithGravityAndOffset(
+        "Curso eliminado de la wishlist",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        150
+      );
     }
-
-    let todoenorden = tempcatalogo.concat(cambiandopropiedad)
-
-    setCatalogo(todoenorden)
-    setWishList(eliminado)
   }
   
-  const agregarCarro=(_x)=>{
-    const buscado = carrito.find(a=>a.codigo===_x.codigo); 
-    
-    let temporal_carrito= carrito;
-    
-    var objtemporal;
+  const agregarCarro=(libro)=>{
+    let existe = carrito.find(e=>e.codigo===libro.codigo); 
+    let temp_lista= carrito;
+    let libro_temp;
 
-    if(buscado!==undefined)
+    if(existe!==undefined)
     {
-      let temporal_importe = buscado.importe;
-
-      objtemporal={
-          cantidad:buscado.cantidad+1,
-          codigo:_x.codigo,
-          titulo:_x.titulo,
-          precio:_x.precio,
-          importe:temporal_importe+_x.precio
+      libro_temp={
+          cantidad:existe.cantidad+1,
+          codigo:libro.codigo,
+          titulo:libro.titulo,
+          precio:libro.precio,
         }
-        temporal_carrito= carrito.filter(a=>a.codigo!==_x.codigo) 
+        temp_lista = carrito.filter(e=>e.codigo!==libro.codigo) 
     }
     else
     {
-      objtemporal={  
+      libro_temp={  
         cantidad:1,
-        codigo:_x.codigo,
-        titulo:_x.titulo,
-        precio:_x.precio,
-        importe:_x.precio
+        codigo:libro.codigo,
+        titulo:libro.titulo,
+        precio:libro.precio,
       }
     }
     
-    setCarrito([...temporal_carrito,objtemporal])
-    setTotal(total+_x.precio)
-  }
+    setCarrito([...temp_lista,libro_temp])
+    setTotal(total+libro.precio)
 
-  const eliminarCarrito=()=>{
-    if (Platform.OS === 'android') {
-       ToastAndroid.show("Tu carrito ha sido vaciado", ToastAndroid.SHORT)
-    } else {
-      AlertIOS.alert("Tu carrito ha sido vaciado");
-      }   
-    setCarrito([])
-    setTotal(0)
-    setCantidades(0)
+    if(Platform.OS==='android'){
+      ToastAndroid.showWithGravityAndOffset(
+        "Agregado al carrito.",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        150
+      );
+    }
   }
-
-  const comprarCarrito=()=>{
+ 
+  const comprar=()=>{
     if (Platform.OS === 'android') {
        ToastAndroid.show("Gracias por tu compra", ToastAndroid.SHORT)
     } else {
@@ -117,42 +113,55 @@ const Libreriaprovider = (props) =>{
     setCantidades(0)
   }
 
-  const eliminarCarro=(_x)=>{
-    const buscado = carrito.find(a=>a.codigo===_x.codigo); 
-    
-    let temporal_carrito = carrito;
-    
-    var objtemporal;
+  const eliminarCarritoTodo=()=>{
 
-    if(buscado.cantidad>1)
-    {
-      let temporal_importe = buscado.importe;
+    setCarrito([]);
+    setTotal(0);
 
-      objtemporal={
-          cantidad:buscado.cantidad-1,
-          codigo:_x.codigo,
-          titulo:_x.titulo,
-          precio:_x.precio,
-          importe:temporal_importe-_x.precio
-        }
-      temporal_carrito = carrito.filter(a=>a.codigo!==_x.codigo)
-        
-      setCarrito([...temporal_carrito,objtemporal])
-      setTotal(total-_x.precio)
+    if (Platform.OS === 'android') {
+       ToastAndroid.showWithGravityAndOffset("Tu carrito ha sido vaciado", 
+       ToastAndroid.SHORT,
+       ToastAndroid.BOTTOM,
+       25,
+       150);
+    }
+  }
+
+  const eliminarCarrito=(libro, index)=>{
+    let temporal;
+
+    if(libro.cantidad===1){
+      temporal = carrito.filter((p,i)=>i!==index)
     }
     else{
-      temporal_carrito = carrito.filter(a=>a.cantidad!==_x.cantidad)
-      setCarrito([...temporal_carrito])
-      setTotal(total-_x.precio)
-    } 
+      const libro_temp={
+          cantidad:libro.cantidad-1,
+          codigo:libro.codigo,
+          titulo:libro.titulo,
+          precio:libro.precio,
+        }
+      temporal = carrito.filter((libro,i)=>i!==index)
+      temporal = [...temporal,libro_temp]
+    }
+    setCarrito(temporal);
+    setTotal(total-libro.precio); 
+
+    if (Platform.OS === 'android') {
+      ToastAndroid.showWithGravityAndOffset("Curso eliminado del carrito.", 
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      25,
+      150);
+   }
+
   }
 
   const contando=()=>{  
-      const tt = carrito.reduce((sueldoT,p)=>{return sueldoT+p.cantidad},0)
-      if(tt>5){
-        return "+5"
+      const veces = carrito.reduce((a,p)=>{return a+p.cantidad},0)
+      if(veces>99){
+        return "+99"
       }else{
-        return tt
+        return veces
       }
   }
 
@@ -167,9 +176,9 @@ const Libreriaprovider = (props) =>{
       agregarWishList,
       eliminarWishList,
       agregarCarro,
+      eliminarCarritoTodo,
+      comprar,
       eliminarCarrito,
-      comprarCarrito,
-      eliminarCarro,
       contando,
     }} 
     >

@@ -8,13 +8,12 @@ import { Badge } from 'react-native-elements';
 import HomeScreen from '../Screens/HomeScreen';
 import Wishlist from '../Screens/Wishlist';
 import Carrito from '../Screens/Carrito';
-
 import { LibreriaContext } from '../Context/LibreriaContext';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator(){
-  const { cantidades, contando, eliminarCarro } = useContext(LibreriaContext);
+  const {contando} = useContext(LibreriaContext);
   return(
     <Tab.Navigator
       initialRouteName="Libreria"
@@ -64,7 +63,6 @@ export default function BottomTabNavigator(){
     <Tab.Screen
       name = "Carrito"
       component={Carrito}
-      
       options={{
           tabBarLabel:"Carrito",
           tabBarIcon:({color})=>(

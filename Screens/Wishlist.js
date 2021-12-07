@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import { Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import { Card, ListItem, Button, Icon } from 'react-native-elements';
-
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
+import { Card} from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import { LibreriaContext } from '../Context/LibreriaContext';
 
 export default function Wishlist() {
@@ -14,25 +12,33 @@ export default function Wishlist() {
     <View>
       <ScrollView>
         {wishList.length === 0 ? (
-          <View>
-            <Text style={styles.paragraph}>Tu wishlist esta vacia</Text>
-            <Image
-              style={styles.logo}
-              source={require('../Imagenes/wishlist.png')}
-            />
-          </View>
+          
+            <Text style={styles.template}>Tu wishlist esta vacia</Text>
+          
         ) : (
             wishList.map((a,i)=>
             <Card>
             <Card.Title>{a.titulo}</Card.Title>
-            <Text key={i}>Precio= ${a.precio} </Text>
-            <Text key={i + 10}>Idioma = {a.idioma}</Text>
-            <View style={styles.container}>
-              <TouchableHighlight onPress={()=> agregarCarro(a)}>
-                <Ionicons name={'cart-outline'} size={22} color={'green'} />
-              </TouchableHighlight>
+            <View
+            style={{
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+              marginLeft: 1,
+              marginRight: 1
+            }}
+          />
+
+          <View>
+            <Text style={styles.datos} key={i}>Precio: ${a.precio} </Text>
+            <Text style={styles.datos} key={i + 10}>{a.idioma}</Text>
+          </View>
+
+            <View style={styles.botones}>
               <TouchableHighlight onPress={() => eliminarWishList(a)}>
-                <Ionicons name={'heart-dislike-outline'} size={22} color={'red'} />
+                <Ionicons name={'trash'} size={35} color={'red'} />
+              </TouchableHighlight>
+              <TouchableHighlight onPress={()=> agregarCarro(a)}>
+                <Ionicons name={'cart-outline'} size={35} color={'green'} />
               </TouchableHighlight>
             </View>
           </Card>
@@ -44,23 +50,21 @@ export default function Wishlist() {
 }
 
 const styles = StyleSheet.create({
- container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 24,
-    flexDirection: 'row',
-  },
-  paragraph: {
-    margin: 24,
-    marginTop: 10,
+  template:{
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    textAlignVertical: "center"
   },
-  logo: {
-    height: 200,
-    width: 300,
-    alignItems: 'center',
+  botones: {
+    padding: 20,
+    size:40,
+    flexDirection: 'row-reverse'
   },
+  datos: {
+    flex: 1,
+    fontWeight: 'bold',
+    justifyContent: 'flex-end',
+    flexDirection: 'column'
+  }
 });

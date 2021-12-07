@@ -1,36 +1,34 @@
 import React, { useContext } from 'react';
-import { Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import {Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import { Card} from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import { LibreriaContext } from '../Context/LibreriaContext';
 
 export default function Wishlist() {
-  const { carrito, total, eliminarCarrito, comprarCarrito, eliminarCarro } = useContext(LibreriaContext);
+  const { carrito, total, eliminarCarritoTodo, comprar, eliminarCarrito } = useContext(LibreriaContext);
 
   return (
-    <View>      
+    <View>    
         {
         carrito.length === 0 
         ? 
+          
           <View>
-            <Image
-              style={styles.logo}
-              source={require('../Imagenes/carro.png')}
-            />
-            <Text style={styles.paragraph}>Tu carrito esta vacio</Text>
+            <Text style={styles.template}>Tu carrito esta vacio</Text>
           </View>
         :
           <ScrollView>
           <View>
-            <Text style={styles.paragraph}>Total: $ {total}</Text>
-            <View style={styles.container2}>
-            <FontAwesome.Button name="check-circle" backgroundColor="#3b7bbf" onPress={()=>comprarCarrito()}>
+            <Text style={styles.template}>Total: $ {total}</Text>
+            <View style={styles.boton}>
+            <FontAwesome.Button backgroundColor="#3b7bbf" onPress={()=>comprar()}>
               Pagar
             </FontAwesome.Button>
-            
+            <TouchableHighlight onPress={() => eliminarCarritoTodo()}>
+                <Ionicons name={'trash'} size={35} color={'red'} />
+              </TouchableHighlight>
             
           </View>
         </View>
@@ -38,12 +36,22 @@ export default function Wishlist() {
             carrito.map((a,i)=>
             <Card>
             <Card.Title>{a.titulo}</Card.Title>
-            <Text key={i}>Cantidad= {a.cantidad} </Text>
-            <Text key={i}>Precio= $ {a.precio} c/u </Text>
-            <Text key={i}>Importe= $ {a.importe}  </Text>
+
+            <View
+            style={{
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+              marginLeft: 1,
+              marginRight: 1
+            }}
+            />
+
+            <Text key={i}>Cantidad: {a.cantidad} </Text>
+            <Text key={i}>Precio unitario: $ {a.precio}</Text>
+            <Text key={i}>Importe: $ {a.cantidad*a.precio}</Text>
             <View style={styles.container}>
-              <TouchableHighlight onPress={() => eliminarCarro(a)}>
-                <Ionicons name={'remove-circle'} size={22} color={'red'} />
+              <TouchableHighlight onPress={() => eliminarCarrito(a,i)}>
+                <Ionicons name={'trash'} size={35} color={'red'} />
               </TouchableHighlight>
             </View>
             </Card>)
@@ -55,6 +63,12 @@ export default function Wishlist() {
 }
 
 const styles = StyleSheet.create({
+  template:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: "center"
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -62,21 +76,10 @@ const styles = StyleSheet.create({
     padding: 24,
     flexDirection: 'row',
   },
-  container2: {
+  boton: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  paragraph: {
-    margin: 24,
-    marginTop: 10,
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  logo: {
-    height: 200,
-    width: 225,
-    margin: 50,
-  },
+
 });
